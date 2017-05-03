@@ -9,6 +9,9 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
+
+testdata.log
+
 # Netbeans files
 build/
 java_examples/nbproject/private/
