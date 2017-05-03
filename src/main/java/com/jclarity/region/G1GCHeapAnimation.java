@@ -47,7 +47,8 @@ public class G1GCHeapAnimation extends Application {
     }
 
     public static void main(String[] args) {
-
+        args = new String[1];
+        args[0] = "/Users/boxcat/projects/regions/testdata.log";
         launch(args);
     }
 }
