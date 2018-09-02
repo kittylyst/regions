@@ -20,6 +20,10 @@ public class JavaVirtualMachine implements Iterable<G1GCHeap> {
         this.path = FileSystems.getDefault().getPath(fileName);
     }
 
+    public JavaVirtualMachine( Path path) {
+        this.path = path;
+    }
+
     public void load() throws IOException {
         RegionStream stream = new RegionStream(path);
         while ( ! stream.isEof()) {
@@ -30,7 +34,9 @@ public class JavaVirtualMachine implements Iterable<G1GCHeap> {
         }
     }
 
-    public int getNumberOfViews() { return viewsOverTime.size(); }
+    public int getNumberOfViews() {
+        return viewsOverTime.size();
+    }
 
     public G1GCHeap getG1GCHeapAt(int index) {
         return viewsOverTime.get(index);

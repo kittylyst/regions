@@ -1,14 +1,17 @@
 package com.jclarity.region.fx;
 
 
-import com.jclarity.region.FrameCounter;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,10 +21,13 @@ public class VideoControls extends HBox {
     private boolean playing = false;
     private Timer timer = null;
     private Button playPause;
+    private Button stop;
     private FrameCounter frameCounter;
     final TimeSlider slider;
+    final private Stage stage;
 
-    public VideoControls() {
+    public VideoControls(Stage stage) {
+        this.stage = stage;
         getStyleClass().add("video-controls");
         slider = new TimeSlider();
         setButtons();
@@ -34,29 +40,32 @@ public class VideoControls extends HBox {
 
     private void setButtons() {
 
-        ToggleButton openFileDialog = new ToggleButton("open");
+//        ToggleButton openFileDialog = new ToggleButton("open");
+//
+//        openFileDialog.setOnAction(event -> {
+//            FileChooser fileChooser = new FileChooser();
+//            fileChooser.setTitle("Open Log File");
+//            File file = fileChooser.showOpenDialog(stage);
+////            openFile(file);
+//        });
 
-        openFileDialog.setOnAction(event -> {
-            pause();
-            System.out.println("open file" + event.toString());
-        });
 
+        Image image ;
 
-        Image image;
-        image = new Image(getClass().getResourceAsStream("step_to_beginning.png"));
-        ToggleButton skipToBeginning = new ToggleButton("|<");  //rewind
-        skipToBeginning.setOnAction(event -> {
-            pause();
-            frameCounter.set(0);
-            System.out.println(event.toString() + ", counter: " + frameCounter.getFrameIndex());
-        });
 
         image = new Image(getClass().getResourceAsStream("step_backwards.png"));
-        ToggleButton rewind = new ToggleButton("<<");
+        Button rewind = new Button("<<");
         rewind.setOnAction(event -> {
             pause();
             timer.cancel();
             frameCounter.stepBackwards();
+        });
+
+        image = new Image(getClass().getResource("step_to_beginning.png").toExternalForm());
+        Button skipToBeginning = new Button("|<");  //rewind
+        skipToBeginning.setOnAction(event -> {
+            pause();
+            frameCounter.reset();
         });
 
 
@@ -83,24 +92,27 @@ public class VideoControls extends HBox {
             } else
                 pause();
         });
-
+        stop = new Button("x");
+        stop.setOnAction(event -> {
+           stop();
+        });
 
         image = new Image(getClass().getResourceAsStream("step_forward.png"));
-        ToggleButton fastForward = new ToggleButton(">>"); //
+        Button fastForward = new Button(">>"); //
         fastForward.setOnAction(event -> {
             pause();
             frameCounter.stepForward();
-            System.out.println(event.toString() + ", counter: " + frameCounter.getFrameIndex());
         });
 
 
         image = new Image(getClass().getResourceAsStream("step_to_end.png"));
-        ToggleButton skipToEnd = new ToggleButton(">|"); //end
+        Button skipToEnd = new Button(">|"); //end
         skipToEnd.setOnAction(event -> {
             pause();
             frameCounter.stepToEnd();
         });
-        getChildren().addAll(openFileDialog, skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
+        //getChildren().addAll(openFileDialog, skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
+        getChildren().addAll(stop,skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
     }
 
     private void pause() {
@@ -109,5 +121,14 @@ public class VideoControls extends HBox {
             timer.cancel();
             playing = false;
         }
+    }
+
+    private void stop() {
+        if ( playing) {
+            playPause.setText(">");
+            timer.cancel();
+            playing = false;
+        }
+        setVisible(false);
     }
 }

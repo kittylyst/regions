@@ -9,9 +9,6 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-
-testdata.log
-
 # Netbeans files
 build/
 java_examples/nbproject/private/
@@ -19,3 +16,9 @@ java_examples/lib/
 /java_examples/dist/
 nb-configuration.xml
 
+# Misc
+testdata.log
+.idea
+.gradle
+build
+out
